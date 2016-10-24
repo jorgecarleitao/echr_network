@@ -4,5 +4,5 @@ This repository hosts the source code to scrape data from the ECHR and add them 
 ## Use ##
 Modify and run the following scripts:
 
-* `query_hudoc_extra_pdf.py`, the basic download script
+* `query_hudoc_extra_pdf.py`, the basic download script. Here what usually needs to be changed is the `kpdate` in the variable `urlstring`
 * `hudoc2db.py`, the script to construct the database
