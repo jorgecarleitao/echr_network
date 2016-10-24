@@ -213,13 +213,7 @@ if __name__ == '__main__':
     
     echr_crawler(urlstring, mode='ALL')
     
-# Testing some boilerplate code
-#     log = Log()
-#     
-#     log.log_config('echr', sys.argv[1])
-#     logger = log.getLogger()
-#     handler = log.getHandler()
-#     logger.info("Hello World of logs")
+
 
 
     
