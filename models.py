@@ -1,6 +1,6 @@
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Table, ForeignKey, Text
+from sqlalchemy import Column, String, Table, ForeignKey, Text, Date
 
 
 Base = declarative_base()
@@ -29,6 +29,8 @@ class Document(Base):
     articles = relationship("Article", secondary=document_articles)
 
     case = Column(String)
+
+    date = Column(Date)
 
     html = Column(Text)
 

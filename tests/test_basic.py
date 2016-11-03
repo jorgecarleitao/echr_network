@@ -49,6 +49,9 @@ class TestGet(unittest.TestCase):
         # test id
         self.assertEqual(doc.id, '001-61414')
 
+        # test date
+        self.assertEqual(doc.date.strftime('%d/%m/%Y'), '28/10/2003')
+
         # test scl
         self.assertIn('Abdulaziz', doc.scl)
         self.assertIn('Wassink v. the Netherlands', doc.scl)

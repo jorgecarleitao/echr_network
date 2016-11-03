@@ -1,6 +1,7 @@
 import urllib.request
 import urllib.error
 import json
+import datetime
 
 import models
 
@@ -96,7 +97,8 @@ def process(docs, session):
 
         html = retrieve_html(doc_id)
 
-        doc = models.Document(id=doc_id, scl=json_object['scl'], html=html, case=json_object['appno'])
+        doc = models.Document(id=doc_id, scl=json_object['scl'], html=html, case=json_object['appno'],
+                              date=parse_date(json_object['kpdate']))
 
         # save and add articles to document
         articles = save_articles(docs, session)
@@ -132,3 +134,8 @@ def retrieve_and_save(session, start=0, max_docs=None, batch_size=500):
 
         _, docs = retrieve_documents(start, documents_to_retrieve)
         process(docs, session)
+
+
+def parse_date(date_string):
+    # '29/01/2004 00:00:00'
+    return datetime.datetime.strptime(date_string, '%d/%m/%Y %H:%M:%S').date()
