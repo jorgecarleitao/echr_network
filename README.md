@@ -1,8 +1,16 @@
-# About #
-This repository hosts the source code to scrape data from the ECHR and add them to the database (only tables `case_doc` and `case`)
+# About
+This repository hosts source code in Python to obtain the [database](http://hudoc.echr.coe.int) of cases of the 
+[European Court of Human Rights](http://www.echr.coe.int/Pages/home.aspx?p=home) 
+and create a local database of it (in sqlalchemy).
 
-## Use ##
-Modify and run the following scripts:
+# Requirements
+Python 2.7 or 3 and pip. Install dependencies (sqlalchemy) using
 
-* `query_hudoc_extra_pdf.py`, the basic download script. Here what usually needs to be changed is the `kpdate` in the variable `urlstring`
-* `hudoc2db.py`, the script to construct the database
+    pip install requirements.txt
+
+# Use
+Create a directory `_cache` and run the script `run_crawler.py`. The script downloads all cases from the chamber and
+grand chamber and their respective text (in html).
+
+# Credits
+This code was created in the Center of Excellence for International Courts ([icourts](http://jura.ku.dk/icourts/)). 

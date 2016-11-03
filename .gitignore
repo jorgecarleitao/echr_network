@@ -1,6 +1,6 @@
-*.log
-*.project
-*.pydevproject
 *.pyc
-.settings
-.settings/*
+.idea
+
+_cache/*.html
+tests/_cache/*.html
+
