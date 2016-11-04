@@ -1,5 +1,4 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Table, ForeignKey, Text, Date, Integer
 
@@ -32,6 +31,8 @@ class Document(Base):
     case = Column(String)
 
     case_name = Column(String)
+
+    tags = Column(String)
 
     date = Column(Date)
 

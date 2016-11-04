@@ -100,7 +100,8 @@ def process(docs, session):
                               html=html,
                               case=json_object['appno'],
                               date=parse_date(json_object['kpdate']),
-                              case_name=json_object['docname'].replace('CASE OF ', '').replace('v.', 'V.'))
+                              case_name=json_object['docname'].replace('CASE OF ', '').replace('v.', 'V.'),
+                              tags=json_object['documentcollectionid2'])
 
         for article_id in parse_articles(json_object):
             article = get_or_create(session, models.Article, id=article_id)

@@ -56,6 +56,9 @@ class TestGet(unittest.TestCase):
         self.assertIn('Abdulaziz', doc.scl)
         self.assertIn('Wassink v. the Netherlands', doc.scl)
 
+        # test
+        self.assertEqual(doc.tags, 'CASELAW;JUDGMENTS;CHAMBER;ENG')
+
         # test articles creation
         self.assertEqual(session.query(models.Article).count(), 2)
 
