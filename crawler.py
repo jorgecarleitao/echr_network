@@ -72,18 +72,17 @@ def retrieve_documents(start=0, count=1, select=SELECT_ALL):
     return json_object["resultcount"], json_object['results']
 
 
-def save_articles(docs, session):
+def parse_articles(doc):
 
     articles = []
-    for doc in docs:
-        articles_ids = doc['columns']['article'].split(';')
-        for article_id in articles_ids:
-            try:
-                article_id = int(article_id)  # consider only main articles
-                x = get_or_create(session, models.Article, id=article_id)
-                articles.append(x)
-            except ValueError:
-                continue
+    articles_ids = doc['article'].split(';')
+    for article_id in articles_ids:
+        try:
+            article_id = int(article_id)  # consider only main articles
+            #x = get_or_create(session, models.Article, id=article_id)
+            articles.append(article_id)
+        except ValueError:
+            continue
 
     return articles
 
@@ -97,16 +96,19 @@ def process(docs, session):
 
         html = retrieve_html(doc_id)
 
-        doc = models.Document(id=doc_id, scl=json_object['scl'], html=html, case=json_object['appno'],
-                              date=parse_date(json_object['kpdate']))
+        doc = models.Document(id=doc_id, scl=json_object['scl'],
+                              html=html,
+                              case=json_object['appno'],
+                              date=parse_date(json_object['kpdate']),
+                              case_name=json_object['docname'].replace('CASE OF ', '').replace('v.', 'V.'))
 
-        # save and add articles to document
-        articles = save_articles(docs, session)
-        for article in articles:
+        for article_id in parse_articles(json_object):
+            article = get_or_create(session, models.Article, id=article_id)
             doc.articles.append(article)
 
-        session.add(doc)
-    session.commit()
+        # merge: if doc already exists in db, update it.
+        session.merge(doc)
+        session.commit()
 
 
 def retrieve_and_save(session, start=0, max_docs=None, batch_size=500):

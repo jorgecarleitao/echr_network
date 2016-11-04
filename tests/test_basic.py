@@ -26,15 +26,12 @@ class TestGet(unittest.TestCase):
         self.assertTrue(count > 0)
         self.assertEqual(docs[0]['columns']['itemid'], '001-61414')
 
-    def test_add_articles(self):
-        session = Session()
-
+    def test_parse_articles(self):
         count, docs = crawler.retrieve_documents()
 
-        crawler.save_articles(docs, session)
+        articles = crawler.parse_articles(docs[0]['columns'])
 
-        session.commit()
-        self.assertEqual(session.query(models.Article).count(), 2)
+        self.assertEqual(len(articles), 2)
 
     def test_process_document(self):
 
@@ -51,6 +48,9 @@ class TestGet(unittest.TestCase):
 
         # test date
         self.assertEqual(doc.date.strftime('%d/%m/%Y'), '28/10/2003')
+
+        # test case name
+        self.assertEqual(doc.case_name, 'RAKEVICH V. RUSSIA')
 
         # test scl
         self.assertIn('Abdulaziz', doc.scl)
@@ -100,6 +100,28 @@ class TestGet(unittest.TestCase):
 
         self.assertEqual(count, 11)
 
+    def test_update_doc(self):
+        session = Session()
+
+        _, docs = crawler.retrieve_documents()
+
+        crawler.process(docs, session)
+
+        doc = session.query(models.Document).first()
+
+        doc.html = 'test'
+        doc.articles[:] = []
+        session.add(doc)
+        session.commit()
+
+        _, docs = crawler.retrieve_documents()
+
+        crawler.process(docs, session)
+
+        doc = session.query(models.Document).first()
+        self.assertNotEqual(len(doc.articles), 0)
+        self.assertNotEqual(doc.html, 'test')
+
 
 class TestAuxiliary(unittest.TestCase):
 
@@ -123,3 +145,13 @@ class TestAuxiliary(unittest.TestCase):
 
         self.assertEqual(data, data1)
         self.assertEqual(data, data2)
+
+
+class TestParser(unittest.TestCase):
+
+    def test_bla(self):
+        _, docs = crawler.retrieve_documents()
+
+        all = docs[0]['columns']['scl'].split(';')
+
+        print(all[0])

@@ -1,6 +1,7 @@
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Table, ForeignKey, Text, Date
+from sqlalchemy import Column, String, Table, ForeignKey, Text, Date, Integer
 
 
 Base = declarative_base()
@@ -8,7 +9,7 @@ Base = declarative_base()
 
 document_articles = Table('document_articles', Base.metadata,
     Column('document_id', String, ForeignKey('document.id')),
-    Column('article_id', String, ForeignKey('article.id'))
+    Column('article_id', Integer, ForeignKey('article.id'))
 )
 
 
@@ -30,6 +31,8 @@ class Document(Base):
 
     case = Column(String)
 
+    case_name = Column(String)
+
     date = Column(Date)
 
     html = Column(Text)
@@ -41,7 +44,7 @@ class Article(Base):
     """
     __tablename__ = 'article'
 
-    id = Column(String, primary_key=True)
+    id = Column(Integer, primary_key=True)
 
     documents = relationship("Document", secondary=document_articles)
 
