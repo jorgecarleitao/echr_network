@@ -34,7 +34,7 @@ class Document(Base):
 
     tags = Column(String)
 
-    date = Column(Date)
+    date = Column(Date, index=True)
 
     html = Column(Text)
 
