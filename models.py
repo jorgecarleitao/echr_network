@@ -48,9 +48,3 @@ class Article(Base):
     id = Column(Integer, primary_key=True)
 
     documents = relationship("Document", secondary=document_articles)
-
-
-class Case(Base):
-    __tablename__ = 'case'
-
-    id = Column(String, primary_key=True)
