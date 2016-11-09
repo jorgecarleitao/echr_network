@@ -12,5 +12,10 @@ Python 2.7 or 3 and pip. Install dependencies (sqlalchemy) using
 Create a directory `_cache` and run the script `run_crawler.py`. The script downloads all cases from the chamber and
 grand chamber and their respective text (in html).
 
+
+# Tests
+This code is unit tested. Run unittests against the directory tests to test crawler.
+Run unittests against the directory live_tests after the crawler to test the creation of the network.
+
 # Credits
 This code was created in the Center of Excellence for International Courts ([icourts](http://jura.ku.dk/icourts/)). 

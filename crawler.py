@@ -14,7 +14,7 @@ SELECT_ALL = 'itemid,applicability,appno,article,conclusion,decisiondate,docname
 SELECT_NONE = 'itemid'
 
 META_URL = 'http://hudoc.echr.coe.int/app/query/results' \
-      '?query=(contentsitename=ECHR) AND (documentcollectionid:"GRANDCHAMBER" OR documentcollectionid:"CHAMBER")' \
+      '?query=(contentsitename=ECHR) AND (documentcollectionid2:"JUDGMENTS")' \
       '&select={select}' + \
       '&sort=&start={start}&length={count}'
 META_URL = META_URL.replace(' ', '%20')
@@ -79,12 +79,16 @@ def parse_articles(doc):
     for article_id in articles_ids:
         try:
             article_id = int(article_id)  # consider only main articles
-            #x = get_or_create(session, models.Article, id=article_id)
             articles.append(article_id)
         except ValueError:
             continue
 
     return articles
+
+
+def process_case_name(string):
+    # remove trailing spaces, see http://stackoverflow.com/a/2077944/931303
+    return ' '.join(string.split()).replace('CASE OF ', '').upper()
 
 
 def process(docs, session):
@@ -96,11 +100,13 @@ def process(docs, session):
 
         html = retrieve_html(doc_id)
 
+        case_name = process_case_name(json_object['docname'])
+
         doc = models.Document(id=doc_id, scl=json_object['scl'],
                               html=html,
                               case=json_object['appno'],
                               date=parse_date(json_object['kpdate']),
-                              case_name=json_object['docname'].replace('CASE OF ', '').replace('v.', 'V.'),
+                              case_name=case_name,
                               tags=json_object['documentcollectionid2'])
 
         for article_id in parse_articles(json_object):

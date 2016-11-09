@@ -125,6 +125,15 @@ class TestGet(unittest.TestCase):
         self.assertNotEqual(len(doc.articles), 0)
         self.assertNotEqual(doc.html, 'test')
 
+    def test_process_case_name(self):
+        name = crawler.process_case_name('MOLDOVAN AND  OTHERS v ROMANIA (No. 2)')
+        self.assertTrue('  ' not in name)
+
+        self.assertTrue('No.' not in name)
+        self.assertTrue('NO.' in name)
+        self.assertTrue(' v ' not in name)
+        self.assertTrue(' V ' in name)
+
 
 class TestAuxiliary(unittest.TestCase):
 
@@ -148,13 +157,3 @@ class TestAuxiliary(unittest.TestCase):
 
         self.assertEqual(data, data1)
         self.assertEqual(data, data2)
-
-
-class TestParser(unittest.TestCase):
-
-    def test_bla(self):
-        _, docs = crawler.retrieve_documents()
-
-        all = docs[0]['columns']['scl'].split(';')
-
-        print(all[0])
