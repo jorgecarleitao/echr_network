@@ -1,6 +1,6 @@
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Table, ForeignKey, Text, Date, Integer
+from sqlalchemy import Column, String, Table, ForeignKey, Text, Date, Integer, PrimaryKeyConstraint
 
 
 Base = declarative_base()
@@ -9,6 +9,13 @@ Base = declarative_base()
 document_articles = Table('document_articles', Base.metadata,
     Column('document_id', String, ForeignKey('document.id')),
     Column('article_id', Integer, ForeignKey('article.id'))
+)
+
+
+document_references = Table('document_references', Base.metadata,
+    Column('from_id', String, ForeignKey('document.id'), nullable=False),
+    Column('to_id', String, ForeignKey('document.id'), nullable=False),
+    #PrimaryKeyConstraint('from_id', 'to_id'),
 )
 
 
@@ -27,6 +34,13 @@ class Document(Base):
     scl = Column(Text)
 
     articles = relationship("Article", secondary=document_articles)
+
+    references = relationship(
+        'Document',
+        secondary=document_references,
+        primaryjoin=document_references.c.from_id==id,
+        secondaryjoin=document_references.c.to_id==id,
+        backref="referrers")
 
     case = Column(String)
 
