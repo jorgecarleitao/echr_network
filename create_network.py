@@ -351,7 +351,7 @@ def parse_references(doc):
 
 
 def parse_all_references(use_json=False, populate_json=False, populate_db=False):
-    file_name = 'network.json'
+    file_name = '_temp_network.json'
 
     parsed_docs = dict()
 
