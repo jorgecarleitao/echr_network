@@ -11,7 +11,7 @@ This procedure is tested (see `tests`).
 To build the network, it uses the meta-data "Strasbourg Court law (scl)",
 that contains (textual) references to other documents, and it uses data mining to translate each
 reference into an unique document. This is done in an extremely reliable way: no known
-false positives (add a link when it does not exist) and little (99.7% of all references) 
+false positives (add a link when it does not exist) and little (0.3% of all references) 
 false negatives (not adding a link when it exist): of the ~70k links, currently <200 are not identified.
 This procedure is heavily tested against human-made identifications (see `live_tests`).
 

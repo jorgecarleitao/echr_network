@@ -31,3 +31,7 @@ for doc in docs:
 
 with open('network.json', 'w') as fp:
     json.dump(json_object, fp, indent=4, sort_keys=True)
+
+
+# to export the database to sql, use:
+# pg_dump -U echr -d echr > dump.sql
