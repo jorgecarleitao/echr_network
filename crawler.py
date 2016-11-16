@@ -10,7 +10,8 @@ import models
 SELECT_ALL = 'itemid,applicability,appno,article,conclusion,decisiondate,docname,documentcollectionid,' \
              'documentcollectionid2,doctype,externalsources,importance,introductiondate,issue,judgementdate,' \
              'kpthesaurus,meetingnumber,originatingbody,publishedby,referencedate,kpdate,reportdate,representedby,' \
-             'resolutiondate,resolutionnumber,respondent,rulesofcourt,separateopinion,scl,typedescription,ecli'
+             'resolutiondate,resolutionnumber,respondent,rulesofcourt,separateopinion,scl,typedescription,ecli,' \
+             'nonviolation,violation'
 SELECT_NONE = 'itemid'
 
 # sorting by itemid makes the download systematic since this number always increases with new documents in hudoc.
@@ -110,7 +111,10 @@ def process(docs, session):
                               case=json_object['appno'],
                               date=parse_date(json_object['kpdate']),
                               case_name=case_name,
-                              tags=json_object['documentcollectionid2'])
+                              tags=json_object['documentcollectionid2'],
+                              violations=json_object['violation'],
+                              nonviolations=json_object['nonviolation'],
+                              )
 
         for article_id in parse_articles(json_object):
             article = get_or_create(session, models.Article, id=article_id)

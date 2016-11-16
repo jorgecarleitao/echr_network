@@ -52,7 +52,14 @@ class Document(Base):
 
     date = Column(Date, index=True)
 
+    violations = Column(String)
+    nonviolations = Column(String)
+
     html = Column(Text)
+
+    @property
+    def any_violation(self):
+        return int(bool(self.violations))
 
 
 class Article(Base):
