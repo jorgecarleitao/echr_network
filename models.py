@@ -46,6 +46,8 @@ class Document(Base):
 
     case_name = Column(String)
 
+    # models.Document.tags.contains('JUDGMENTS') for decisions and
+    # models.Document.tags.contains('COMMUNICATEDCASES') for communications
     tags = Column(String)
 
     date = Column(Date, index=True)

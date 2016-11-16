@@ -363,10 +363,11 @@ def parse_all_references(use_json=False, populate_json=False, populate_db=False)
         except IOError:
             pass
 
-    # with text and in english and not fixed
+    # judgements with text, in english and not parsed
     docs = session.query(models.Document) \
         .filter(~(models.Document.html == '')) \
         .filter(models.Document.tags.contains('ENG')) \
+        .filter(models.Document.tags.contains('JUDGMENTS')) \
         .order_by(desc('date')) \
         .filter(~models.Document.id.in_(list(parsed_docs.keys())))
 

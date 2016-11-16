@@ -13,10 +13,13 @@ SELECT_ALL = 'itemid,applicability,appno,article,conclusion,decisiondate,docname
              'resolutiondate,resolutionnumber,respondent,rulesofcourt,separateopinion,scl,typedescription,ecli'
 SELECT_NONE = 'itemid'
 
+# sorting by itemid makes the download systematic since this number always increases with new documents in hudoc.
 META_URL = 'http://hudoc.echr.coe.int/app/query/results' \
-      '?query=(contentsitename=ECHR) AND (documentcollectionid2:"JUDGMENTS")' \
+      '?query=(contentsitename=ECHR) AND (documentcollectionid2:"JUDGMENTS" OR documentcollectionid2:"COMMUNICATEDCASES")' \
       '&select={select}' + \
-      '&sort=&start={start}&length={count}'
+      '&sort=itemid Ascending' + \
+      '&start={start}&length={count}'
+
 META_URL = META_URL.replace(' ', '%20')
 META_URL = META_URL.replace('"', '%22')
 
@@ -65,7 +68,7 @@ def retrieve_html(doc_id):
 def retrieve_documents(start=0, count=1, select=SELECT_ALL):
     url = META_URL.format(start=start, count=count, select=select)
 
-    data = open_url(url, 'doc_list_%d_%d_all' % (start, count))
+    data = open_url(url, 'doc_list_%d_%d_all' % (start, count), reset_cache=True)
 
     json_object = json.loads(data)
 
@@ -146,5 +149,11 @@ def retrieve_and_save(session, start=0, max_docs=None, batch_size=500):
 
 
 def parse_date(date_string):
+    # for some reason dates are not returned consistently.
+    # in some instances the month and day are exchanged
+    if '12:00:00 AM' in date_string:
+        date_string = date_string.split(' ')[0]
+        return datetime.datetime.strptime(date_string, '%m/%d/%Y').date()
+
     # '29/01/2004 00:00:00'
     return datetime.datetime.strptime(date_string, '%d/%m/%Y %H:%M:%S').date()

@@ -1,6 +1,7 @@
 import unittest
 import os.path
 
+import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -133,6 +134,15 @@ class TestGet(unittest.TestCase):
         self.assertTrue('NO.' in name)
         self.assertTrue(' v ' not in name)
         self.assertTrue(' V ' in name)
+
+    def test_dates(self):
+        date_string = '5/31/2001 12:00:00 AM'
+        date = crawler.parse_date(date_string)
+        self.assertEqual(date, datetime.date(2001, 5, 31))
+
+        date_string = '1/5/2001 00:00:00'
+        date = crawler.parse_date(date_string)
+        self.assertEqual(date, datetime.date(2001, 5, 1))
 
 
 class TestAuxiliary(unittest.TestCase):
