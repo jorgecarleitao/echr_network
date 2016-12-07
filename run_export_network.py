@@ -13,17 +13,14 @@ docs = session.query(models.Document) \
         .filter(~(models.Document.html == '')) \
         .filter(models.Document.tags.contains('ENG')) \
         .order_by(desc('date'))
-count = docs.count()
 
 json_object = {}
-i = 0
 for doc in docs:
-    i += 1
-
     references = list(set([ref.id for ref in doc.references]))
 
     json_object[doc.id] = {
         'year': doc.date.year,
+        'month': doc.date.month,
         'references': references,
         'case_name': doc.case_name,
         'cases': doc.case.split(';')
